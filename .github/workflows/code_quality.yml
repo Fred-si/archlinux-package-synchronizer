@@ -1,0 +1,35 @@
+name: code-quality
+on:
+  workflow_dispatch:
+  push:
+  pull_request:
+
+jobs:
+  code_quality:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        include:
+          - tool_name: pytest
+            run_command: pytest
+          - tool_name: mypy
+            run_command: mypy .
+          - tool_name: ruff
+            run_command: ruff check --no-fix .
+          - tool_name: black
+            run_command: black --check .
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install
+        run: |
+          pip install '.[dev]'
+
+      - name: Run ${{ matrix.tool_name }}
+        run: ${{ matrix.run_command }}
