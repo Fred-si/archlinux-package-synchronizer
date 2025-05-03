@@ -1,0 +1,140 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "archlinux-package-synchronizer"
+version = "0.0.1"
+authors = [
+    { name = "fred-si", email = "fred-si@zaclys.net" },
+]
+description = "Synchronize Archlinux package using configuration file"
+readme = "README.md"
+requires-python = ">=3.13"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: POSIX :: Linux",
+]
+license = "MIT"
+
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+    # Tests
+    "pytest==8.*",
+    "pytest-cov==6.*",
+
+    # Lint
+    "mypy==1.*",
+    "ruff==0.*",
+
+    # Misc
+    "pre-commit==4.*",
+    "black==25.*",
+]
+
+[project.scripts]
+hello = "archlinux_package_synchronizer:main"
+
+[project.urls]
+"Homepage" = "https://github.com/fred-si/archlinux-package-synchronizer"
+"Bug Tracker" = "https://github.com/fred-si/archlinux-package-synchronizer/issues"
+
+[tool.pytest.ini_options]
+pythonpath = "src"
+testpaths = ["tests"]
+addopts = [
+    "--doctest-modules",
+]
+norecursedirs = [
+    "dist",
+    "build",
+    ".mypy_cache",
+    ".pytest_cache",
+    ".ruff_cache",
+    ".github",
+]
+
+[tool.mypy]
+python_version = "3.13"
+mypy_path = "$MYPY_CONFIG_FILE_DIR/src"
+strict = true
+exclude = [
+    "^(data|build|venv|alembic)/$",
+    '^(^\.mypy_cache|\.pytest_cache|\.ruff_cache)/$'
+]
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+disable_error_code = ["method-assign"] # in test, we want to be able to mock instance methods
+
+[tool.ruff]
+fix = true
+unsafe-fixes = true
+
+[tool.ruff.lint]
+extend-select = ["ALL"]
+ignore = [
+    "D10", # missing docstring
+    "D203", # one blank line before class docstring
+    "D213", # multi-line summary first line
+    "ANN", # type annotation
+    "T20", # print/pprint
+    "I001", # import sort/formating
+    "DTZ001",
+    "DTZ005",
+    "DTZ006",
+    "PLC0414", # useless-import-alias
+]
+allowed-confusables = ["’"]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["E402"]
+"test_*.py" = [
+    "S101", # assert
+    "PLR2004", # missing-type-self
+    "E501", # line-too-long
+]
+"src/conftest.py" = [
+    "INP001", # add __init__.py
+]
+
+[tool.ruff.lint.flake8-annotations]
+mypy-init-return = true
+
+[tool.ruff.lint.flake8-quotes]
+inline-quotes = "double"
+
+[tool.ruff.lint.isort]
+lines-between-types = 1
+order-by-type = true
+
+[tool.black]
+target-version = ["py313"]
+line-length = 80
+
+[tool.coverage.run]
+omit = [
+    "tests/*",
+    "alembic/*",
+    "venv/*",
+    "data/*",
+    ".pytest_cache/*",
+    ".mypy_cache/*",
+    ".ruff_cache/*",
+]
+branch = true
+
+[tool.coverage.report]
+exclude_also = [
+    # Don't complain about missing debug-only code:
+    "def __repr__",
+    "if self\\.debug",
+    # Don't complain if non-runnable code isn't run:
+    "if TYPE_CHECKING:",
+    "assert_never",
+    "@overload",
+    # Don't complain about abstract methods, they aren't run:
+    "@(abc\\.)?abstractmethod",
+]
