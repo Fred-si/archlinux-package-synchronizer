@@ -1,0 +1,29 @@
+pkgname=archlinux-package-synchronizer-git
+pkgver=r5.21ac6da
+pkgrel=1
+pkgdesc="Synchronize Archlinux package using configuration file."
+arch=('x86_64')
+url="https://github.com/Fred-si/archlinux-package-synchronizer"
+license=('MIT')
+depends=()
+makedepends=('git' 'python-setuptools' 'python-build' 'python-installer')
+optdepends=()
+source=("$pkgname::git+https://github.com/Fred-si/archlinux-package-synchronizer.git")
+sha256sums=('SKIP')
+
+pkgver() {
+    cd "${pkgname}"
+    printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+build() {
+    cd "${srcdir}/${pkgname}"
+    python -m build --wheel --no-isolation
+}
+
+package() {
+  cd "${srcdir}/${pkgname}"
+  python -m installer --destdir="${pkgdir}" dist/*.whl
+
+  install -Dm644 'LICENSE.txt' "${pkgdir}"/usr/share/licenses/${pkgname}/LICENSE
+}

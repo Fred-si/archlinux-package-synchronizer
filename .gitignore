@@ -2,6 +2,12 @@
 venv/
 *.egg-info
 dist/
+build/
+
+# Archlinux makepkg
+pkgbuild/*/pkg
+pkgbuild/*/src
+pkgbuild/*/*.pkg.tar.zst
 
 # quality tools
 .mypy_cache
