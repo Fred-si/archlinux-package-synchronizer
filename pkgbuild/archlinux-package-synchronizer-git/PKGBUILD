@@ -7,7 +7,7 @@ url="https://github.com/Fred-si/archlinux-package-synchronizer"
 license=('MIT')
 depends=()
 makedepends=('git' 'python-setuptools' 'python-build' 'python-installer')
-optdepends=()
+optdepends=('python-typer')
 source=("$pkgname::git+https://github.com/Fred-si/archlinux-package-synchronizer.git")
 sha256sums=('SKIP')
 
