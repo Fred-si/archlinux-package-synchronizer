@@ -14,6 +14,7 @@ click==8.2.1
     # via
     #   black
     #   pip-tools
+    #   typer
 coverage==7.10.3
     # via pytest-cov
 distlib==0.4.0
@@ -24,6 +25,10 @@ identify==2.6.13
     # via pre-commit
 iniconfig==2.1.0
     # via pytest
+markdown-it-py==3.0.0
+    # via rich
+mdurl==0.1.2
+    # via markdown-it-py
 mypy==1.17.1
     # via archlinux-package-synchronizer (pyproject.toml)
 mypy-extensions==1.1.0
@@ -54,7 +59,9 @@ pluggy==1.6.0
 pre-commit==4.3.0
     # via archlinux-package-synchronizer (pyproject.toml)
 pygments==2.19.2
-    # via pytest
+    # via
+    #   pytest
+    #   rich
 pyproject-hooks==1.2.0
     # via
     #   build
@@ -67,10 +74,20 @@ pytest-cov==6.2.1
     # via archlinux-package-synchronizer (pyproject.toml)
 pyyaml==6.0.2
     # via pre-commit
+rich==14.1.0
+    # via
+    #   archlinux-package-synchronizer (pyproject.toml)
+    #   typer
 ruff==0.12.8
     # via archlinux-package-synchronizer (pyproject.toml)
+shellingham==1.5.4
+    # via typer
+typer==0.16.0
+    # via archlinux-package-synchronizer (pyproject.toml)
 typing-extensions==4.14.1
-    # via mypy
+    # via
+    #   mypy
+    #   typer
 virtualenv==20.33.1
     # via pre-commit
 wheel==0.45.1
