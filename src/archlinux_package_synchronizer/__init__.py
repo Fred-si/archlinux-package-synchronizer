@@ -1,6 +1,4 @@
-def initialize() -> None:
-    import typer
+def run() -> None:
+    from .commands import app
 
-    from .commands import initialize
-
-    typer.run(initialize)
+    app()
