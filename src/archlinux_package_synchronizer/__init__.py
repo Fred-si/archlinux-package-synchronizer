@@ -1,1 +1,4 @@
-from .main import main as main
+def run() -> None:
+    from .commands import app
+
+    app()
