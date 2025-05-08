@@ -5,9 +5,18 @@ pkgdesc="Synchronize Archlinux package using configuration file."
 arch=('x86_64')
 url="https://github.com/Fred-si/archlinux-package-synchronizer"
 license=('MIT')
-depends=()
-makedepends=('git' 'python-setuptools' 'python-build' 'python-installer')
-optdepends=()
+depends=(
+    'which'
+    'python'
+    'python-typer'
+    'python-rich'
+)
+makedepends=(
+    'git'
+    'python-build'
+    'python-installer'
+    'python-setuptools'
+)
 source=("$pkgname::git+https://github.com/Fred-si/archlinux-package-synchronizer.git")
 sha256sums=('SKIP')
 
