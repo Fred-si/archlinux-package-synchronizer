@@ -37,7 +37,7 @@ dev = [
 ]
 
 [project.scripts]
-hello = "archlinux_package_synchronizer:main"
+aps-initialize = "archlinux_package_synchronizer:initialize"
 
 [project.urls]
 "Homepage" = "https://github.com/fred-si/archlinux-package-synchronizer"
