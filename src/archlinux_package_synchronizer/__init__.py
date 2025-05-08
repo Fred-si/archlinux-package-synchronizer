@@ -1,7 +1,6 @@
-import typer
+def initialize() -> None:
+    import typer
 
+    from .commands import initialize
 
-def main() -> typer.Typer:
-    from .main import hello_world
-
-    return typer.run(hello_world)
+    typer.run(initialize)
