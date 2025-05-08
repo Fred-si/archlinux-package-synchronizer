@@ -1,9 +1,5 @@
-def main() -> str:
-    return hello_world()
-
-
-def hello_world() -> str:
-    return f"{hello()}, {world()}!".capitalize()
+def hello_world() -> None:
+    print(f"{hello()}, {world()}!".capitalize())
 
 
 def hello() -> str:
