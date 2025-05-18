@@ -13,11 +13,11 @@ from archlinux_package_synchronizer.config import (
     ARCHLINUX_PACKAGE_NAME,
     PACKAGE_LIST_DIRECTORY_NAME,
 )
-from archlinux_package_synchronizer.process_runner import ExecutableFinder
 
 
 @pytest.fixture(autouse=True)
 def patch_executable_finder(monkeypatch: MonkeyPatch) -> None:
+    from archlinux_package_synchronizer import process_runner
     from archlinux_package_synchronizer.package_manager import (
         PackageManagerName,
     )
@@ -26,7 +26,6 @@ def patch_executable_finder(monkeypatch: MonkeyPatch) -> None:
         ExecutableFinderInterface,
         ExecutableInterface,
         ProcessResult,
-        runners,
     )
 
     class Executable(ExecutableInterface):
@@ -43,10 +42,10 @@ def patch_executable_finder(monkeypatch: MonkeyPatch) -> None:
 
             return Executable()
 
-    monkeypatch.setattr(runners, "ExecutableFinder", ExecutableFinder)
+    monkeypatch.setattr(process_runner, "ExecutableFinder", Finder)
 
 
-@pytest.fixture
+@pytest.fixture(autouse=True)
 def yay_mock(monkeypatch: MonkeyPatch) -> Mock:
     from archlinux_package_synchronizer.package_manager import _yay
 
