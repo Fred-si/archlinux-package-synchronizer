@@ -7,16 +7,15 @@ from .models import CapturedProcessResult, ProcessResult
 
 
 class ExecutableFinder(ExecutableFinderInterface):
-    def __init__(self) -> None:
-        self._which = _Executable(Path("which"))
-
     def find_executable(self, name: str) -> ExecutableInterface:
-        result = self._which.capture(name)
+        from shutil import which
 
-        if not result.is_success:
-            raise ExecutableNotExistsError(name)
+        executable_path = which(name)
 
-        return _Executable(Path(result.standard_output.strip()))
+        if executable_path is None:
+            raise ExecutableNotFoundError(name)
+
+        return _Executable(Path(executable_path))
 
 
 class _Executable(ExecutableInterface):
@@ -43,6 +42,6 @@ class _Executable(ExecutableInterface):
         return f"Executable({self._executable!r})"
 
 
-class ExecutableNotExistsError(OSError):
+class ExecutableNotFoundError(OSError):
     def __init__(self, name: str) -> None:
         super().__init__(f'Executable "{name}" not found in path.')
