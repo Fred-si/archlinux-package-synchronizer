@@ -13,6 +13,37 @@ from archlinux_package_synchronizer.config import (
     ARCHLINUX_PACKAGE_NAME,
     PACKAGE_LIST_DIRECTORY_NAME,
 )
+from archlinux_package_synchronizer.process_runner import ExecutableFinder
+
+
+@pytest.fixture(autouse=True)
+def patch_executable_finder(monkeypatch: MonkeyPatch) -> None:
+    from archlinux_package_synchronizer.package_manager import (
+        PackageManagerName,
+    )
+    from archlinux_package_synchronizer.process_runner import (
+        CapturedProcessResult,
+        ExecutableFinderInterface,
+        ExecutableInterface,
+        ProcessResult,
+        runners,
+    )
+
+    class Executable(ExecutableInterface):
+        def call(self, *args: str) -> ProcessResult:
+            raise NotImplementedError
+
+        def capture(self, *args: str) -> CapturedProcessResult:
+            raise NotImplementedError
+
+    class Finder(ExecutableFinderInterface):
+        def find_executable(self, name: str) -> ExecutableInterface:
+            if name != PackageManagerName.YAY:
+                raise ValueError(name)
+
+            return Executable()
+
+    monkeypatch.setattr(runners, "ExecutableFinder", ExecutableFinder)
 
 
 @pytest.fixture
