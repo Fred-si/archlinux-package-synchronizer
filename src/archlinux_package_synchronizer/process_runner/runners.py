@@ -8,7 +8,7 @@ from .models import CapturedProcessResult, ProcessResult
 
 class ExecutableFinder(ExecutableFinderInterface):
     def __init__(self) -> None:
-        self._which = Executable(Path("which"))
+        self._which = _Executable(Path("which"))
 
     def find_executable(self, name: str) -> ExecutableInterface:
         result = self._which.capture(name)
@@ -16,10 +16,10 @@ class ExecutableFinder(ExecutableFinderInterface):
         if not result.is_success:
             raise ExecutableNotExistsError(name)
 
-        return Executable(Path(result.standard_output.strip()))
+        return _Executable(Path(result.standard_output.strip()))
 
 
-class Executable(ExecutableInterface):
+class _Executable(ExecutableInterface):
     def __init__(self, executable: Path) -> None:
         self._executable = executable
 

@@ -23,6 +23,6 @@ def patch_run(monkeypatch: MonkeyPatch) -> None:
 @pytest.fixture(autouse=True)
 def executable_mock(monkeypatch: MonkeyPatch) -> MagicMock:
     mock = MagicMock(spec=ExecutableInterface)
-    monkeypatch.setattr(runners, "Executable", mock)
+    monkeypatch.setattr(runners, "_Executable", mock)
 
     return mock
