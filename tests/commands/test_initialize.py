@@ -11,8 +11,6 @@ from archlinux_package_synchronizer.commands.initialize import (
 )
 from archlinux_package_synchronizer.config import ARCHLINUX_PACKAGE_NAME
 
-PACKAGE_LIST_DIRECTORY_NAME = "package_list"
-
 
 @pytest.fixture
 def yay_mock(monkeypatch: MonkeyPatch) -> Mock:
@@ -24,11 +22,6 @@ def yay_mock(monkeypatch: MonkeyPatch) -> Mock:
     monkeypatch.setattr(_yay, "Yay", MagicMock(return_value=mock))
 
     return mock
-
-
-@pytest.fixture
-def list_path(tmp_path: Path) -> Path:
-    return tmp_path / PACKAGE_LIST_DIRECTORY_NAME
 
 
 def test_initialize_should_raise_when_config_dir_is_file(
@@ -75,17 +68,6 @@ def test_initialize_should_create_config_directory_when_not_exists(
     assert config_dir.is_dir()
 
 
-def test_initialize_should_create_package_list_directory_when_not_exists(
-    tmp_path: Path, list_path: Path
-) -> None:
-    config_dir = tmp_path / "config"
-
-    initialize(config_dir)
-
-    assert config_dir.is_dir()
-    assert list_path.is_dir()
-
-
 def test_initialize_should_create_parent_directories(tmp_path: Path) -> None:
     config_dir = tmp_path / "a" / "b" / "c"
     initialize(config_dir)
@@ -93,29 +75,26 @@ def test_initialize_should_create_parent_directories(tmp_path: Path) -> None:
     assert config_dir.is_dir()
 
 
-def test_initialize_should_raise_when_config_package_list_directory_is_not_empty(
-    tmp_path: Path, list_path: Path
+def test_initialize_should_raise_when_config_directory_is_not_empty(
+    tmp_path: Path,
 ) -> None:
-    list_path.mkdir(parents=True, exist_ok=True)
-    (list_path / "file").touch()
+    (tmp_path / "file").touch()
 
     with pytest.raises(NotAnEmptyDirectoryError, match=str(tmp_path)):
         initialize(tmp_path)
 
 
-def test_initialize_should_create_base_file(
-    tmp_path: Path, list_path: Path
-) -> None:
+def test_initialize_should_create_base_file(tmp_path: Path) -> None:
     initialize(tmp_path)
-    assert list_path.is_dir()
+    assert tmp_path.is_dir()
 
-    base_file = list_path / "00_base"
+    base_file = tmp_path / "00_base"
     assert base_file.is_file()
     assert base_file.read_text() == f"base\n{ARCHLINUX_PACKAGE_NAME}\n"
 
 
 def test_initialize_should_list_installed_packages(
-    yay_mock: Mock, tmp_path: Path, list_path: Path
+    yay_mock: Mock, tmp_path: Path
 ) -> None:
     yay_mock.get_explicitly_installed_packages.return_value = [
         "base",
@@ -126,4 +105,4 @@ def test_initialize_should_list_installed_packages(
 
     initialize(tmp_path)
 
-    assert (list_path / "01_explicitly_installed").read_text() == "bar\nfoo\n"
+    assert (tmp_path / "01_explicitly_installed").read_text() == "bar\nfoo\n"
