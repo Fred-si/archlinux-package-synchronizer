@@ -7,6 +7,7 @@ import typer
 from archlinux_package_synchronizer.config import (
     ARCHLINUX_PACKAGE_NAME,
     DEFAULT_CONFIG_DIRECTORY,
+    PACKAGE_LIST_DIRECTORY_NAME,
 )
 from archlinux_package_synchronizer.console import standard_output
 from archlinux_package_synchronizer.package_manager import PackageManagerName
@@ -25,6 +26,9 @@ def initialize(
             resolve_path=True,
         ),
     ] = DEFAULT_CONFIG_DIRECTORY,
+    package_list_directory_name: Annotated[
+        str, typer.Option(help="The name of the package list directory")
+    ] = PACKAGE_LIST_DIRECTORY_NAME,
     package_manager_name: PackageManagerName = PackageManagerName.YAY,
 ) -> None:
     """
@@ -39,20 +43,22 @@ def initialize(
     if config_dir.exists() and not config_dir.is_dir():
         raise NotADirectoryError(config_dir)
 
-    config_dir.mkdir(exist_ok=True, parents=True)
-    if tuple(config_dir.iterdir()):
-        raise NotAnEmptyDirectoryError(config_dir)
+    list_dir = config_dir / package_list_directory_name
+
+    list_dir.mkdir(exist_ok=True, parents=True)
+    if tuple(list_dir.iterdir()):
+        raise NotAnEmptyDirectoryError(list_dir)
 
     package_manager = create_manager(ExecutableFinder(), package_manager_name)
 
     base_packages = ["base", ARCHLINUX_PACKAGE_NAME]
-    base_file = config_dir / "00_base"
+    base_file = list_dir / "00_base"
     create_file(base_file, "\n".join(base_packages))
 
     installed_packages = set(
         package_manager.get_explicitly_installed_packages()
     ) - set(base_packages)
-    installed_file = config_dir / "01_explicitly_installed"
+    installed_file = list_dir / "01_explicitly_installed"
     create_file(installed_file, "\n".join(sorted(installed_packages)))
 
     standard_output.print(

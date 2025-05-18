@@ -9,9 +9,10 @@ from archlinux_package_synchronizer.commands import initialize
 from archlinux_package_synchronizer.commands.initialize import (
     NotAnEmptyDirectoryError,
 )
-from archlinux_package_synchronizer.config import ARCHLINUX_PACKAGE_NAME
-
-PACKAGE_LIST_DIRECTORY_NAME = "package_list"
+from archlinux_package_synchronizer.config import (
+    ARCHLINUX_PACKAGE_NAME,
+    PACKAGE_LIST_DIRECTORY_NAME,
+)
 
 
 @pytest.fixture
@@ -78,11 +79,8 @@ def test_initialize_should_create_config_directory_when_not_exists(
 def test_initialize_should_create_package_list_directory_when_not_exists(
     tmp_path: Path, list_path: Path
 ) -> None:
-    config_dir = tmp_path / "config"
+    initialize(tmp_path)
 
-    initialize(config_dir)
-
-    assert config_dir.is_dir()
     assert list_path.is_dir()
 
 
