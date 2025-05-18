@@ -3,7 +3,7 @@ from typing import assert_never
 
 from archlinux_package_synchronizer.process_runner import ExecutableFinder
 
-from .abstract_package_manager import AbstractPackageManager
+from .interfaces import PackageManagerInterface
 
 
 class PackageManagerName(StrEnum):
@@ -13,7 +13,7 @@ class PackageManagerName(StrEnum):
 
 def create_manager(
     executable_finder: ExecutableFinder, name: PackageManagerName
-) -> AbstractPackageManager:
+) -> PackageManagerInterface:
     find_executable = executable_finder.find_executable
 
     match name:

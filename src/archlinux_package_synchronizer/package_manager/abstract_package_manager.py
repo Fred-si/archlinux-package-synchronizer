@@ -1,10 +1,12 @@
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 from collections.abc import Collection, Sequence
 
 from archlinux_package_synchronizer.process_runner import ExecutableInterface
 
+from .interfaces import PackageManagerInterface
 
-class AbstractPackageManager(ABC):
+
+class AbstractPackageManager(PackageManagerInterface):
     def __init__(self, executable: ExecutableInterface) -> None:
         self._executable = executable
 
