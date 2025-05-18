@@ -6,7 +6,9 @@ from archlinux_package_synchronizer.process_runner import (
     ExecutableFinder,
     ExecutableNotFoundError,
 )
-from archlinux_package_synchronizer.process_runner.runners import _Executable
+from archlinux_package_synchronizer.process_runner._executable import (
+    _Executable,
+)
 
 from tests.conftest import SetPath
 
