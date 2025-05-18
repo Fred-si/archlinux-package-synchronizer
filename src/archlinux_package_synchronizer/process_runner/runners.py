@@ -3,14 +3,12 @@ import subprocess
 from pathlib import Path
 from typing import Final
 
+from .exceptions import ExecutableNotFoundError
 from .interfaces import ExecutableFinderInterface, ExecutableInterface
 from .models import CapturedProcessResult, ProcessResult
 
 
 class ExecutableFinder(ExecutableFinderInterface):
-    def __init__(self):
-        self._factory = _Executable
-
     def find_executable(self, name: str) -> ExecutableInterface:
         from shutil import which
 
@@ -19,7 +17,7 @@ class ExecutableFinder(ExecutableFinderInterface):
         if executable_path is None:
             raise ExecutableNotFoundError(name)
 
-        return self._factory(Path(executable_path))
+        return _Executable(Path(executable_path))
 
 
 class _Executable(ExecutableInterface):
@@ -51,8 +49,3 @@ class _Executable(ExecutableInterface):
             return False
 
         return self._path == other._path
-
-
-class ExecutableNotFoundError(OSError):
-    def __init__(self, name: str) -> None:
-        super().__init__(f'Executable "{name}" not found in path.')

@@ -1,3 +1,7 @@
+from .exceptions import (
+    ExecutableNotFoundError as ExecutableNotFoundError,
+    NotCapturedProcessError as NotCapturedProcessError,
+)
 from .interfaces import (
     ExecutableFinderInterface as ExecutableFinderInterface,
     ExecutableInterface as ExecutableInterface,

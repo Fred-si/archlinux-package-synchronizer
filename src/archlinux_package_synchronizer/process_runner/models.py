@@ -2,6 +2,10 @@ from functools import cached_property
 from subprocess import CompletedProcess
 from typing import Final, Self
 
+from archlinux_package_synchronizer.process_runner.exceptions import (
+    NotCapturedProcessError,
+)
+
 
 class ReturnCode:
     def __init__(self, value: int) -> None:
@@ -56,7 +60,3 @@ class CapturedProcessResult(ProcessResult):
     @cached_property
     def standard_error(self) -> str:
         return self._completed_process.stderr.decode()
-
-
-class NotCapturedProcessError(ValueError):
-    pass

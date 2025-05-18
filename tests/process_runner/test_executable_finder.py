@@ -2,11 +2,11 @@ from pathlib import Path
 
 import pytest
 
-from archlinux_package_synchronizer.process_runner import ExecutableFinder
-from archlinux_package_synchronizer.process_runner.runners import (
+from archlinux_package_synchronizer.process_runner import (
+    ExecutableFinder,
     ExecutableNotFoundError,
-    _Executable,
 )
+from archlinux_package_synchronizer.process_runner.runners import _Executable
 
 from tests.conftest import SetPath
 
