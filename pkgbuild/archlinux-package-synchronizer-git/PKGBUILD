@@ -6,7 +6,6 @@ arch=('x86_64')
 url="https://github.com/Fred-si/archlinux-package-synchronizer"
 license=('MIT')
 depends=(
-    'which'
     'python'
     'python-typer'
     'python-rich'
