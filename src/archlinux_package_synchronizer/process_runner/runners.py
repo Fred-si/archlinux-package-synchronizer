@@ -46,6 +46,12 @@ class _Executable(ExecutableInterface):
     def __repr__(self) -> str:
         return f"{type(self)}({self._path!r})"
 
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, type(self)):
+            return False
+
+        return self._path == other._path
+
 
 class ExecutableNotFoundError(OSError):
     def __init__(self, name: str) -> None:

@@ -5,6 +5,7 @@ import pytest
 from archlinux_package_synchronizer.process_runner import ExecutableFinder
 from archlinux_package_synchronizer.process_runner.runners import (
     ExecutableNotFoundError,
+    _Executable,
 )
 
 from tests.conftest import SetPath
@@ -26,4 +27,4 @@ class TestExecutableFinder:
 
         executable = ExecutableFinder().find_executable(executable_path.name)
 
-        assert executable.path == executable_path
+        assert executable == _Executable(executable_path)
