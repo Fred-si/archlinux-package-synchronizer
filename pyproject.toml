@@ -109,6 +109,16 @@ inline-quotes = "double"
 [tool.ruff.lint.isort]
 lines-between-types = 1
 order-by-type = true
+section-order = [
+    "future",
+    "standard-library",
+    "third-party",
+    "first-party",
+    "testing",
+    "local-folder",
+]
+[tool.ruff.lint.isort.sections]
+testing = ["tests"]
 
 [tool.black]
 target-version = ["py313"]
