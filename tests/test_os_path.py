@@ -3,7 +3,7 @@ from typing import Protocol
 
 import pytest
 
-from archlinux_package_synchronizer.path import get_path
+from archlinux_package_synchronizer.os_path import OsPath, get_path
 
 
 class SetPath(Protocol):
@@ -23,9 +23,9 @@ def test_get_path_should_be_an_empty_sequence_when_path_env_is_empty(
 ) -> None:
     set_path()
 
-    path = list(get_path())
+    path = get_path()
 
-    assert path == []
+    assert path == OsPath()
 
 
 def test_get_path_should_contain_one_element_when_path_env_contain_only_one_element(
@@ -33,9 +33,9 @@ def test_get_path_should_contain_one_element_when_path_env_contain_only_one_elem
 ) -> None:
     set_path(tmp_path)
 
-    path = list(get_path())
+    path = get_path()
 
-    assert path == [tmp_path]
+    assert path == OsPath([tmp_path])
 
 
 def test_get_path_should_contain_two_elements_when_path_env_contain_two_elements(
@@ -44,6 +44,6 @@ def test_get_path_should_contain_two_elements_when_path_env_contain_two_elements
 
     set_path(tmp_path / "foo", tmp_path / "bar")
 
-    path = sorted(get_path())
+    path = get_path()
 
-    assert path == [tmp_path / "bar", tmp_path / "foo"]
+    assert path == OsPath((tmp_path / "foo", tmp_path / "bar"))
