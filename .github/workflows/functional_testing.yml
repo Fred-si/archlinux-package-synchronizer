@@ -1,0 +1,16 @@
+name: functional-testing
+on:
+  workflow_dispatch:
+  push:
+  pull_request:
+
+jobs:
+  code_quality:
+    runs-on: archlinux-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install
+        run: |
+          git status
