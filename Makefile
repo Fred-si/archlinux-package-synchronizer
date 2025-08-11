@@ -11,7 +11,8 @@ setup: install git-hooks
 install: venv/lib/python3.13/site-packages/archlinux_package_synchronizer*
 venv/lib/python3.13/site-packages/archlinux_package_synchronizer*: venv
 	./venv/bin/pip install --upgrade pip
-	./venv/bin/pip install -e '.[dev]'
+	./venv/bin/pip install -r requirements-dev.txt
+	./venv/bin/pip install -e '.'
 	./venv/bin/mypy --install-types --non-interactive . || true
 
 git-hooks: venv/bin/pre-commit .git/hooks/pre-commit
@@ -19,6 +20,12 @@ venv/bin/pre-commit: install
 .git/hooks/pre-commit: venv/bin/pre-commit
 	./venv/bin/pre-commit install --install-hooks
 
+pip-compile: venv/bin/pip-compile
+	./venv/bin/pip-compile --upgrade --strip-extras --output-file requirements.txt
+	./venv/bin/pip-compile --upgrade --strip-extras --extra dev --output-file requirements-dev.txt
+	./venv/bin/pip-sync requirements-dev.txt
+
+venv/bin/pip-compile: install
 teardown: ## Delete generated files and venv
 	rm -rf venv dist build src/*.egg-info .ruff_cache .pytest_cache .mypy_cache
 	find . -name '__pycache__' | xargs rm -rf
